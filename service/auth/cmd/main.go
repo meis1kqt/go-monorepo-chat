@@ -1,7 +1,17 @@
 package main
 
-import "fmt"
+import (
+	"github.com/meis1kqt/go-monorepo-chat.git/pkg/slog"
+	"github.com/meis1kqt/go-monorepo-chat.git/service/auth/internal/config"
+)
+
 
 func main(){
-	fmt.Print("auth is working")
+	
+	Config := config.MustLoadConfig()
+
+	logger := slog.NewLogger(Config.Environment)
+
+	logger.Info("Starting auth service...")
+
 }
