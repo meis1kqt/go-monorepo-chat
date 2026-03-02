@@ -2,11 +2,9 @@ package jwt
 
 import (
 	"errors"
-	"go/token"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/retry"
 	"github.com/meis1kqt/go-monorepo-chat.git/pkg/models"
 )
 
