@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/meis1kqt/go-monorepo-chat.git/service/auth/internal/dopmain"
+	"github.com/meis1kqt/go-monorepo-chat.git/pkg/models"
 )
 
 type PostgresStorage struct {
@@ -15,7 +15,7 @@ func NewStorage(pool *pgxpool.Pool) *PostgresStorage {
 	return &PostgresStorage{pool: pool}
 }
 
-func (s *PostgresStorage) SaveUser(ctx context.Context, user *dopmain.User) error {
+func (s *PostgresStorage) SaveUser(ctx context.Context, user *models.User) error {
 	query := `INSERT INTO users (email, password_hash) VALUES ($1, $2)`
 	_, err := s.pool.Exec(ctx, query, user.Email, user.PassHash)
 	if err != nil {
@@ -23,11 +23,11 @@ func (s *PostgresStorage) SaveUser(ctx context.Context, user *dopmain.User) erro
 	}
 	return nil
 }
-func (s *PostgresStorage) GetUser(ctx context.Context, email string) (*dopmain.User, error) {
+func (s *PostgresStorage) GetUser(ctx context.Context, email string) (*models.User, error) {
 	query := `SELECT id, email, password_hash FROM users WHERE email = $1`
 	row := s.pool.QueryRow(ctx, query, email)
 
-	var user dopmain.User
+	var user models.User
 	err := row.Scan(&user.ID, &user.Email, &user.PassHash)
 	if err != nil {
 		return nil, err

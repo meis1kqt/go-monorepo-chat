@@ -6,12 +6,13 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/meis1kqt/go-monorepo-chat.git/service/auth/internal/dopmain"
+	"github.com/meis1kqt/go-monorepo-chat.git/pkg/jwt"
+	"github.com/meis1kqt/go-monorepo-chat.git/pkg/models"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type Storage interface{
-	GetUser(ctx context.Context, email string)(*dopmain.User, error)
+	GetUser(ctx context.Context, email string)(*models.User, error)
 	SaveUser(ctx context.Context, email string, passHash []byte) error
 }
 
@@ -28,8 +29,12 @@ func New(log *slog.Logger, Storage Storage, JwtSecret string, TTL time.Duration)
 
 
 func (a *AuthService) RegisterUser(ctx context.Context, email , password string) error {
-	if email == "" || password == "" {
-		a.log.Error("password or email", "error")
+	if email == "" {
+		a.log.Error("email", "error")
+		return  fmt.Errorf("wrong something")
+	}
+	if  password == "" {
+		a.log.Error("password", "error")
 		return  fmt.Errorf("wrong something")
 	}
 
@@ -42,8 +47,36 @@ func (a *AuthService) RegisterUser(ctx context.Context, email , password string)
 	err = a.Storage.SaveUser(ctx, email, passHash)
 
 	if err != nil {
-		defer a.log.Error("storage", "error")
 		return fmt.Errorf("failed to save user: %w", err)
 	}
 	return nil
+}
+
+func (a *AuthService) Login(ctx context.Context, email, password string)(string, error) {
+	if email == "" {
+		a.log.Error("in login service","email", "error")
+		return  "", fmt.Errorf("wrong something")
+	}
+	if  password == "" {
+		a.log.Error("in login service","password", "error")
+		return  "", fmt.Errorf("wrong something")
+	}
+	
+	user, err := a.Storage.GetUser(ctx, email)
+
+	if err != nil {
+		return "", err
+	}
+
+	if err := bcrypt.CompareHashAndPassword(user.PassHash, []byte(password)); err != nil {
+		return "", err
+	}
+
+	token, err := jwt.GenerateToken(user, a.JwtSecret, int(a.TTL))
+
+	if err != nil {
+		return "", err
+	}
+
+	return token, nil
 }
