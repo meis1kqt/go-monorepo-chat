@@ -1,4 +1,5 @@
 Env: "local"
+database_url: "postgres://postgres:password@localhost:5432/auth_db?sslmode=disable"
 jwt:
   secret: "mysecretkey"
   expiration: 3600 # in seconds 

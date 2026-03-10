@@ -14,6 +14,7 @@ import (
 type Storage interface{
 	GetUser(ctx context.Context, email string)(*models.User, error)
 	SaveUser(ctx context.Context, email string, passHash []byte) error
+	
 }
 
 type AuthService struct {

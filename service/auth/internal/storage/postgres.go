@@ -15,9 +15,9 @@ func NewStorage(pool *pgxpool.Pool) *PostgresStorage {
 	return &PostgresStorage{pool: pool}
 }
 
-func (s *PostgresStorage) SaveUser(ctx context.Context, user *models.User) error {
+func (s *PostgresStorage) SaveUser(ctx context.Context, email string, passHash []byte) error {
 	query := `INSERT INTO users (email, password_hash) VALUES ($1, $2)`
-	_, err := s.pool.Exec(ctx, query, user.Email, user.PassHash)
+	_, err := s.pool.Exec(ctx, query, email, passHash)
 	if err != nil {
 		return err	
 	}

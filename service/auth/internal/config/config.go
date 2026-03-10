@@ -11,6 +11,7 @@ type Config struct {
 	JWT      JWTConfig      `yaml:"jwt"`
 	Database DatabaseConfig `yaml:"database"`
 	GRPC     GRPCConfig     `yaml:"grpc"`
+	DataBaseUrl string `yaml:"database_url"`
 }
 
 type JWTConfig struct {
