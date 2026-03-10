@@ -47,7 +47,7 @@ func (a *AuthService) RegisterUser(ctx context.Context, email , password string)
 	err = a.Storage.SaveUser(ctx, email, passHash)
 
 	if err != nil {
-		return fmt.Errorf("failed to save user: %w", err)
+  		return fmt.Errorf("failed to save user: %w", err)
 	}
 	return nil
 }

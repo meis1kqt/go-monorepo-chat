@@ -13,21 +13,20 @@ type Claims struct {
 	jwt.RegisteredClaims
 }
 
-
-
 func GenerateToken(user *models.User, jwtSecret string, duration int) (string, error) {
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id": user.ID,
 		"exp":     time.Now().Add(time.Duration(duration) * time.Minute).Unix(),
 	})
-	
+
 	return token.SignedString([]byte(jwtSecret))
 }
 
 func ValidateToken(tokenString string, jwtSecret string) (bool, error) {
 
 	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, errors.New("unexpected signing method")
 		}
