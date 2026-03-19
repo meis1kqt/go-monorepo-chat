@@ -26,7 +26,7 @@ func main(){
 
 	context := context.Background()
 
-	db, err := pgxpool.New(context, Config.DataBaseUrl) 
+	db, err := pgxpool.New(context, Config.Database.DSN()) 
 	if err != nil {
 		logger.Error("Failed to connect to database", "error", err)
 		os.Exit(1)

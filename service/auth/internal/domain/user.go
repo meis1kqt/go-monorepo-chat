@@ -1,4 +1,4 @@
-package dopmain
+package domain
 
 
 type User struct {

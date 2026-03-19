@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/ilyakaznacheev/cleanenv"
@@ -46,4 +47,8 @@ func MustLoadConfig() *Config {
 	}
 
 	return &cfg
+}
+func (db *DatabaseConfig) DSN() string {
+    return fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=disable",
+        db.User, db.Password, db.Host, db.Port, db.DBName)
 }

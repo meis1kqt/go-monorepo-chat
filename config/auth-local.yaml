@@ -1,5 +1,4 @@
 Env: "local"
-database_url: "postgres://postgres:password@localhost:5432/auth_db?sslmode=disable"
 jwt:
   secret: "mysecretkey"
   expiration: 3600 # in seconds 
@@ -7,8 +6,8 @@ grpc:
   host: "localhost"
   port: 50051
 database:
-  host: "localhost"
+  host: "auth-service-postgres"
   port: 5432  
-  user: "postgres"
-  password: "password"  
-  dbname: "auth_db" 
+  user: "auth_service"
+  password: "changeme"  
+  dbname: "auth_service_db" 
