@@ -48,7 +48,7 @@ func (c *ChatService) SendMessage(ctx context.Context, creatorID, userID int64, 
 
 	msg := &domain.Message{
 		DialogID: dialog.ID,
-		From: dialog.CreatorID,
+		From: creatorID,
 		Text: text,
 	}
 	
@@ -86,7 +86,7 @@ func (c *ChatService) GetUser(ctx context.Context, userID int64) (*domain.User, 
 func (c *ChatService) SearchUsers(ctx context.Context, username string) ([]*domain.User, error) {
 	users, err := c.storage.SearchUser(ctx, username)
 	if err != nil {
-		return users, err
+		return nil, err
 	}
 
 	return users, nil
